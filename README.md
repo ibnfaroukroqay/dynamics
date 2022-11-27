@@ -1,7 +1,7 @@
 ## Dynamics API Wrapper
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/ibnfaroukroqay/dynamics)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/:vendor_slug/:package_slug/run-tests?label=tests)](https://github.com/ibnfaroukroqay/dynamics/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/ibnfaroukroqay/dynamics.svg?style=flat-square)](https://packagist.org/packages/ibnfaroukroqay/dynamics)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ibnfaroukroqay/dynamics/run-tests?label=tests)](https://github.com/ibnfaroukroqay/dynamics/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/workflow/status/ibnfaroukroqay/dynamics/Fix%20PHP%20code%20style%20issues?label=code%20style)](https://github.com/ibnfaroukroqay/dynamics/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/ibnfaroukroqay/dynamics.svg?style=flat-square)](https://packagist.org/packages/ibnfaroukroqay/dynamics)
 
