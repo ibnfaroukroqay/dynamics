@@ -4,6 +4,7 @@ namespace Ibnfaroukroqay\Dynamics;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+
 //use VendorName\Skeleton\Commands\SkeletonCommand;
 
 class DynamicsServiceProvider extends PackageServiceProvider
@@ -20,6 +21,6 @@ class DynamicsServiceProvider extends PackageServiceProvider
 //            ->hasCommand(SkeletonCommand::class)
 //            ->hasViews()
 //            ->hasMigration('create_skeleton_table')
-            ;
+;
     }
 }
