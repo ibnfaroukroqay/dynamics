@@ -2,59 +2,57 @@
 
 namespace Ibnfaroukroqay\Dynamics;
 
+use App\Constants\DynamicsConstants;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class Dynamics
 {
-    private array $authData;
 
-    private mixed $url;
-
-    private mixed $authUrl;
-
-    public function __construct()
+    public static function getUrlProperty()
     {
-        $this->authUrl = config('dynamics.auth_url');
-        $this->url = config('dynamics.url');
-        $this->authData = config('dynamics.auth_data');
+        return config('dynamics.url');
     }
 
-    /**
-     * @return string|null
-     */
-    public function getToken(): ?string
+    public static function getAuthUrlProperty()
     {
-        if (Storage::disk('local')->exists('dynamics.key')) {
-            return Storage::disk('local')->get('dynamics.key');
-        }
-
-        return $this->getNewToken();
+        return config('dynamics.auth_url');
     }
 
-    public function getNewToken()
+    public static function getAuthDataProperty()
+    {
+        return config('dynamics.auth_data');
+    }
+
+    public static function getNewToken()
     {
         $response = Http::asForm()->post(
-            $this->authUrl,
-            $this->authData
+            self::getAuthUrlProperty(),
+            self::getAuthDataProperty()
         );
         if ($response->ok()) {
             $responseBody = $response->object();
             if (isset($responseBody->access_token)) {
                 Storage::disk('local')->put('dynamics.key', $responseBody->access_token);
-
                 return $responseBody->access_token;
             }
         }
-
         return null;
     }
 
-    public function list($endpoint)
+    public static function getToken(): ?string
     {
-        $token = $this->getToken();
-        $url = $this->url.$endpoint;
+        if (Storage::disk('local')->exists('dynamics.key')) {
+            return Storage::disk('local')->get('dynamics.key');
+        }
+        return self::getNewToken();
+    }
+
+    public static function list($endpoint)
+    {
+        $token = self::getToken();
+        $url = self::getUrlProperty().$endpoint;
         try {
             $response = Http::withToken($token)->withHeaders([
                 'Content-Type' => 'application/json',
@@ -62,26 +60,23 @@ class Dynamics
                 if (! $exception instanceof RequestException || $exception->response->status() !== 401) {
                     return false;
                 }
-                $request->withToken($this->getNewToken());
-
+                $request->withToken(self::getNewToken());
                 return true;
             })->send('POST', $url);
             if ($response->ok()) {
                 return $response->json();
             }
-
             return [];
         } catch (\Exception $e) {
             info('Exception: '.$e->getCode().' | '.$e->getMessage());
-
             return [];
         }
     }
 
-    public function sendRequest($endpoint, $data)
+    public static function sendRequest($endpoint, $data)
     {
-        $token = $this->getToken();
-        $url = $this->url.$endpoint;
+        $token = self::getToken();
+        $url = self::getUrlProperty().$endpoint;
         try {
             $response = Http::withToken($token)->withHeaders([
                 'Content-Type' => 'application/json',
@@ -89,18 +84,15 @@ class Dynamics
                 if (! $exception instanceof RequestException || $exception->response->status() !== 401) {
                     return false;
                 }
-                $request->withToken($this->getNewToken());
-
+                $request->withToken(self::getNewToken());
                 return true;
             })->post($url, $data);
             if ($response->ok()) {
                 return $response->json();
             }
-
             return [];
         } catch (\Exception $e) {
             info($e->getCode().' | '.$e->getMessage());
-
             return [];
         }
     }
