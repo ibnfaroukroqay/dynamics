@@ -2,14 +2,12 @@
 
 namespace Ibnfaroukroqay\Dynamics;
 
-use App\Constants\DynamicsConstants;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class Dynamics
 {
-
     public static function getUrlProperty()
     {
         return config('dynamics.url');
@@ -35,9 +33,11 @@ class Dynamics
             $responseBody = $response->object();
             if (isset($responseBody->access_token)) {
                 Storage::disk('local')->put('dynamics.key', $responseBody->access_token);
+
                 return $responseBody->access_token;
             }
         }
+
         return null;
     }
 
@@ -46,6 +46,7 @@ class Dynamics
         if (Storage::disk('local')->exists('dynamics.key')) {
             return Storage::disk('local')->get('dynamics.key');
         }
+
         return self::getNewToken();
     }
 
@@ -61,14 +62,17 @@ class Dynamics
                     return false;
                 }
                 $request->withToken(self::getNewToken());
+
                 return true;
             })->send('POST', $url);
             if ($response->ok()) {
                 return $response->json();
             }
+
             return [];
         } catch (\Exception $e) {
             info('Exception: '.$e->getCode().' | '.$e->getMessage());
+
             return [];
         }
     }
@@ -85,14 +89,17 @@ class Dynamics
                     return false;
                 }
                 $request->withToken(self::getNewToken());
+
                 return true;
             })->post($url, $data);
             if ($response->ok()) {
                 return $response->json();
             }
+
             return [];
         } catch (\Exception $e) {
             info($e->getCode().' | '.$e->getMessage());
+
             return [];
         }
     }
